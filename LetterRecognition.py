@@ -18,7 +18,7 @@ OUTPUT_DIR = "./Plots"
 SAVE = False
 
 
-def generate_confusion_matrix(y_predict, name):
+def generate_confusion_matrix(y_predict, name, df, y_test):
     cm = confusion_matrix(y_test, y_predict)
     plt.figure(figsize=(12, 8))
     sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=sorted(df["letter"].unique()),
@@ -34,7 +34,7 @@ def generate_confusion_matrix(y_predict, name):
         plt.show()
 
 
-def generate_importance_graph(name, model):
+def generate_importance_graph(name, model, X_test, y_test, X_train, columns):
     result = permutation_importance(model, X_test, y_test, scoring='accuracy', n_repeats=10, random_state=42)
 
     # Sorting feature according to their importance
@@ -94,7 +94,7 @@ def main():
     knn_accuracy = accuracy_score(y_test, y_knn_predict)
     print("KNN model accuracy:", knn_accuracy)
 
-    generate_importance_graph("KNN", modelKNN)
+    generate_importance_graph("KNN", modelKNN, X_test, y_test, X_train, columns)
 
     # Decision Tree
     modelDT = DecisionTreeClassifier()
@@ -105,7 +105,7 @@ def main():
     dt_accuracy = accuracy_score(y_test, y_dt_predict)
     print("Decision Tree model accuracy:", dt_accuracy)
 
-    generate_importance_graph("Decision Tree", modelDT)
+    generate_importance_graph("Decision Tree", modelDT, X_test, y_test, X_train, columns)
 
     # Random Forest
     modelRF = RandomForestClassifier(n_estimators=100, random_state=42)
@@ -116,7 +116,7 @@ def main():
     rf_accuracy = accuracy_score(y_test, y_rf_predict)
     print("Random Forest model accuracy:", rf_accuracy)
 
-    generate_importance_graph("Random Forest", modelRF)
+    generate_importance_graph("Random Forest", modelRF, X_test, y_test, X_train, columns)
 
     # Naive Bayes
     modelNB = GaussianNB()
@@ -127,12 +127,12 @@ def main():
     nb_accuracy = accuracy_score(y_test, y_nb_predict)
     print("Naive Bayes model accuracy:", nb_accuracy)
 
-    generate_importance_graph("Naive Bayes", modelNB)
+    generate_importance_graph("Naive Bayes", modelNB, X_test, y_test, X_train, columns)
 
-    generate_confusion_matrix(y_knn_predict, "KNN")
-    generate_confusion_matrix(y_dt_predict, "Decision Tree")
-    generate_confusion_matrix(y_rf_predict, "Random Forest")
-    generate_confusion_matrix(y_nb_predict, "Naive Bayes")
+    generate_confusion_matrix(y_knn_predict, "KNN", df, y_test)
+    generate_confusion_matrix(y_dt_predict, "Decision Tree", df, y_test)
+    generate_confusion_matrix(y_rf_predict, "Random Forest", df, y_test)
+    generate_confusion_matrix(y_nb_predict, "Naive Bayes", df, y_test)
 
     # Comparison
     model_names = ["Random Forest", "Naive Bayes", "Decision Tree", "KNN"]
@@ -159,3 +159,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+    
