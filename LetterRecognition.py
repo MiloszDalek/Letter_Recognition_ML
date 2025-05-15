@@ -58,7 +58,7 @@ def generate_importance_graph(name, model):
         plt.show()
 
 
-if __name__ == '__main__':
+def main():
     columns = [
         "letter", "x-box", "y-box", "width", "height", "onpix", "x-bar", "y-bar",
         "x2bar", "y2bar", "xybar", "x2ybr", "xy2br", "x-ege", "xegvy", "y-ege", "yegvx"
@@ -155,3 +155,7 @@ if __name__ == '__main__':
         plt.close()
     else:
         plt.show()
+
+
+if __name__ == '__main__':
+    main()
